@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Cuaca</title>
+    <style>
+        * {
+            font-family: "Poppins", sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            width: 350px;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        input {
+            width: 70%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #74ebd5;
+            box-shadow: 0 0 5px #74ebd5;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #74ebd5;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #5cd1c7;
+        }
+
+        #tampilan {
+            margin-top: 20px;
+            text-align: left;
+            color: #444;
+            line-height: 1.8;
+        }
+
+        #tampilan p {
+            margin: 8px 0;
+            font-size: 15px;
+        }
+
+        #suhu {
+            font-weight: bold;
+            color: #0077b6;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: 0;
+            height: 1px;
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Cek Cuaca</h2>
+        <div>
+            <input type="text" id="inputLokasi" placeholder="Masukkan nama kota...">
+            <button id="btnCari">Cari</button>
+        </div>
+        <hr>
+        <div id="tampilan">
+            <p>Negara: <span id="negara"></span></p>
+            <p>Provinsi: <span id="provinsi"></span></p>
+            <p>Kecamatan: <span id="kecamatan"></span></p>
+            <p>Suhu: <span id="suhu"></span> °C</p>
+            <p>Longitude: <span id="longitude"></span></p>
+            <p>Latitude: <span id="latitude"></span></p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" 
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        const apiKey = "4847461daa5d45d2b2b63937250810";
+
+        $("#btnCari").click(function(){
+            let lokasi = $("#inputLokasi").val();
+            if(lokasi.trim() === ""){
+                alert("Masukkan nama kota dulu!");
+                return;
+            }
+
+            const urlapi = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lokasi}&aqi=no`;
+
+            $.ajax({
+                url: urlapi,
+                method: "GET",
+                success: function(data){
+                    console.log(data);
+
+                    $("#negara").text(data.location.country);
+                    $("#provinsi").text(data.location.region);
+                    $("#kecamatan").text(data.location.name);
+                    $("#suhu").text(data.current.temp_c);
+                    $("#longitude").text(data.location.lon);
+                    $("#latitude").text(data.location.lat);
+                },
+                error: function(){
+                    alert("Data tidak ditemukan atau terjadi kesalahan.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
