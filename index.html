@@ -118,4 +118,26 @@
                 return;
             }
 
-           
+            const urlapi = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lokasi}&aqi=no`;
+
+            $.ajax({
+                url: urlapi,
+                method: "GET",
+                success: function(data){
+                    console.log(data);
+
+                    $("#negara").text(data.location.country);
+                    $("#provinsi").text(data.location.region);
+                    $("#kecamatan").text(data.location.name);
+                    $("#suhu").text(data.current.temp_c);
+                    $("#longitude").text(data.location.lon);
+                    $("#latitude").text(data.location.lat);
+                },
+                error: function(){
+                    alert("Data tidak ditemukan atau terjadi kesalahan.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
